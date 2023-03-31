@@ -36,10 +36,5 @@ namespace Ordering.Application.Features.Orders.Commands.UpdateOrder
 
             return Unit.Value;
         }
-
-        Task IRequestHandler<UpdateOrderCommand>.Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
