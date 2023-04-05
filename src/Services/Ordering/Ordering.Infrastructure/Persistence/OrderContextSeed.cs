@@ -11,10 +11,9 @@ namespace Ordering.Infrastructure.Persistence
             {
                 orderContext.Orders.AddRange(GetPreconfiguredOrders());
                 await orderContext.SaveChangesAsync();
-
             }
         }
-
+        
         private static IEnumerable<Order> GetPreconfiguredOrders()
         {
             return new List<Order> {
@@ -25,7 +24,18 @@ namespace Ordering.Infrastructure.Persistence
                     EmailAddress = "ezozkme@gmail.com",
                     AddressLine = "Bahcelievler", 
                     Country = "Turkey", 
-                    TotalPrice = 350
+                    TotalPrice = 350,
+                    CVV = "5589",
+                    CardName = "Master Card",
+                    CardNumber = "5424 1801 2345 6789",
+                    Expiration = "12/30/2025",
+                    PaymentMethod = 3,
+                    LastModifiedBy ="",
+                    CreatedBy = "",
+                    CreatedDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    State = "Tamil Nadu",
+                    ZipCode = "600028"
                 }
             };
         }
