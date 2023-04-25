@@ -24,7 +24,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//To avoid http rdirection, no warn message in console log
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
