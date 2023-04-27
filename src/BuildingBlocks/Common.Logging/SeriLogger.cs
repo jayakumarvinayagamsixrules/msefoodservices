@@ -5,7 +5,7 @@ using Serilog.Sinks.Elasticsearch;
 
 namespace Common.Logging
 {
-    public class SeriLogger
+    public static class SeriLogger
     {
         public static Action<HostBuilderContext, LoggerConfiguration> Configure =>
            (context, configuration) =>

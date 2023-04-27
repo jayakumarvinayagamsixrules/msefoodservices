@@ -1,15 +1,28 @@
 using AspnetRunBasics.Services;
+using Common.Logging;
 using Microsoft.Extensions.Configuration;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddTransient<LoggingDelegatingHandler>();
+
+//Serilog setup
+builder.Host.UseSerilog(SeriLogger.Configure);
+
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>
-                c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiSettings:GatewayAddress")));
+                c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiSettings:GatewayAddress")))
+    .AddHttpMessageHandler<LoggingDelegatingHandler>();
+
 builder.Services.AddHttpClient<IBasketService, BasketService>(c =>
-    c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiSettings:GatewayAddress")));
+    c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiSettings:GatewayAddress")))
+    .AddHttpMessageHandler<LoggingDelegatingHandler>();
+
 builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
-    c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiSettings:GatewayAddress")));
+    c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiSettings:GatewayAddress")))
+    .AddHttpMessageHandler<LoggingDelegatingHandler>(); 
 
 
 builder.Services.AddRazorPages();
