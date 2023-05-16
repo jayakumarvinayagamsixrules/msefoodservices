@@ -1,6 +1,8 @@
 using Common.Logging;
 using EventBus.Messages.Common;
+using HealthChecks.UI.Client;
 using MassTransit;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Ordering.API.EventBusConsumer;
@@ -27,7 +29,6 @@ builder.Services.AddMassTransit(config => {
     config.UsingRabbitMq((ctx, cfg) => {
 
         cfg.Host(builder.Configuration.GetValue<string>("EventBusSettings:HostAddress"));
-
         cfg.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, c => {
             c.ConfigureConsumer<BasketCheckoutConsumer>(ctx);
         });
@@ -44,6 +45,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<OrderContext>();
 
 var app = builder.Build();
 app.MigrateDatabase<OrderContext>((context, services) =>
@@ -64,5 +67,10 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();
